@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <script>
+      let tokenHash = window.location.hash;
+      if (tokenHash){
+        if (tokenHash.includes('access_token')){
+          if (window.opener){
+            window.opener.postMessage({
+              type: 'supabase_auth',
+              hash: tokenHash
+            }, '*');
+            window.close();
+          }
+          else if (window.parent !== window){
+            window.parent.postMessage({
+              type: 'supabase_auth',
+              hash: tokenHash
+            }, '*');
+          }
+          else {
+            let params = new URLSearchParams(hash.substring(1));
+            let redirectUrl = localStorage.getItem('gameUrl');
+          }
+        }
+        else {
+          let gameUrl = new URLSearchParams(window.location.search).get('gameUrl');
+          if (gameUrl){
+            localStorage.setItem('gameUrl',gameUrl);
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
+</html>
