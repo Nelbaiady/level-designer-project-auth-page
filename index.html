@@ -8,13 +8,12 @@
         if (tokenHash.includes('access_token')){
           if (window.opener){
             
-            if (window.opener){
-                console.log('opener exists, sending message');
-                window.opener.postMessage({
-                    type: 'supabase_auth',
-                    hash: tokenHash
-                }, '*');
-                window.close();
+            console.log('opener exists, sending message');
+            window.opener.postMessage({
+                type: 'supabase_auth',
+                hash: tokenHash
+            }, '*');
+            window.close();
             }
             else {
                 console.log('no opener, window.opener is:', window.opener);
