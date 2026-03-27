@@ -1,49 +1,29 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <p>Authenticating...</p>
+    <p>Authenticating</p>
     <script>
       let tokenHash = window.location.hash;
-      if (tokenHash){
-        if (tokenHash.includes('access_token')){
-          if (window.opener){
-            
+      console.log('tokenHash:', tokenHash);
+      if (tokenHash) {
+        if (tokenHash.includes('access_token')) {
+          console.log('has access_token');
+          if (window.opener) {
             console.log('opener exists, sending message');
-            window.opener.postMessage({
-                type: 'supabase_auth',
-                hash: tokenHash
-            }, '*');
+            window.opener.postMessage({ type: 'supabase_auth', hash: tokenHash }, '*');
             window.close();
-            }
-            else {
-                console.log('no opener, window.opener is:', window.opener);
-            }
-            
-            window.opener.postMessage({
-              type: 'supabase_auth',
-              hash: tokenHash
-            }, '*');
-            window.close();
-          }
-          else if (window.parent !== window){
-            window.parent.postMessage({
-              type: 'supabase_auth',
-              hash: tokenHash
-            }, '*');
-          }
-          else {
-            let params = new URLSearchParams(tokenHash.substring(1));
+          } else if (window.parent !== window) {
+            console.log('sending to parent');
+            window.parent.postMessage({ type: 'supabase_auth', hash: tokenHash }, '*');
+          } else {
+            console.log('no opener or parent');
             let redirectUrl = localStorage.getItem('gameUrl');
+            if (redirectUrl) window.location.href = redirectUrl + tokenHash;
           }
         }
-        else {
-          let gameUrl = new URLSearchParams(window.location.search).get('gameUrl');
-          if (gameUrl){
-            localStorage.setItem('gameUrl',gameUrl);
-          }
-        }
+      } else {
+        console.log('no tokenHash found');
       }
     </script>
   </body>
-</html>
 </html>
