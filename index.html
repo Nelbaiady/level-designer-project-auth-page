@@ -1,12 +1,25 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <p>Authenticating</p>
+    <p>Authenticating...</p>
     <script>
       let tokenHash = window.location.hash;
       if (tokenHash){
         if (tokenHash.includes('access_token')){
           if (window.opener){
+            
+            if (window.opener){
+                console.log('opener exists, sending message');
+                window.opener.postMessage({
+                    type: 'supabase_auth',
+                    hash: tokenHash
+                }, '*');
+                window.close();
+            }
+            else {
+                console.log('no opener, window.opener is:', window.opener);
+            }
+            
             window.opener.postMessage({
               type: 'supabase_auth',
               hash: tokenHash
